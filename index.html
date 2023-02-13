@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>Messaging application</title>
+</head>
+<body>
+    <div class="left">
+        <div class="top-left">
+            <img id="logo" src="assets/T logo.png" alt="logo">
+            <!-- <button class="add-room"><img src="assets/plus-symbol-button.png" alt="add room" class="icons"></button>
+            <button class="add-room"><img src="assets/setting.png" alt="settings" class="icons"></button> -->
+
+            <img src="assets/plus-symbol-button.png" alt="add room" class="icons" id="add-room">
+            <img src="assets/setting.png" alt="settings" class="icons">
+        </div>
+
+        <section>
+            <ul class="room-list">
+                
+            </ul>
+        </section>
+    </div>  
+
+    <div class="top-middle">
+        <div class="description"></div> 
+        <button class="chat-green-button"><img src="assets/chat-green.png" alt="chat" class="top-right-icons"></button>
+        <button class="flash-button"><img src="assets/flash.png" alt="chat" class="top-right-icons"></button>
+        <button class="search-button"><img src="assets/search.png" alt="chat" class="top-right-icons"></button>
+    </div>
+
+    <div class="chat">  
+        <table>
+
+        </table>
+    </div>
+
+    <div class="top-right">
+        <img src="assets/plus-symbol-button.png" alt="add user" class="add-user-button">
+        <ul class="user-list">
+            
+        </ul>
+
+    </div>
+
+    
+    <div class="message">
+        <img src="assets/chat-bubble.png" alt="chat" class="chat-icon">
+
+        <div class="refresh-div">
+            <button class="refresh-button">
+                <img src="assets/refresh.png" alt="refresh" class="refresh-icon">
+            </button>
+            
+        </div>
+
+        <textarea placeholder='Please select a chat room to message in'></textarea>
+
+        <button class="send-message">Send</button>
+
+        <button class="box-button">
+            <img src="assets/box.png" alt="box" class="box">
+        </button>
+    </div>
+
+    <div class="page-mask"></div>
+
+    <div class="new-room-popup popup">
+        <span class="new-room popup-heading">New chat room</span>
+
+        <form>
+            <input type="text" placeholder="Room name" id="new-room-name">
+            <input type="text" placeholder="Room description" id="new-room-description">
+            <div class="buttons">
+                <button id="cancel-room">CANCEL</button>
+                <button id="create-room">CREATE</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="add-user-popup popup">
+        <span class="add-user popup-heading">Add a new user</span>
+
+        <form>
+            <input type="text" placeholder="Username" id="new-username"><br><br>
+
+            <label for="roles">Choose a role:</label>
+
+            <select name="roles" id="roles">
+                <option value="admin">Admin</option>
+                <option value="manager">Manager</option>
+            </select>
+
+            <div class="buttons">
+                <button id="cancel-room">CANCEL</button>
+                <button id="add-user">ADD USER</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="chatRoomsClass.js"></script>
+    <script src="index2.js"></script>
+    <!-- <script src="test.js"></script> -->
+
+
+</body>
+</html>
