@@ -1,5 +1,7 @@
-const http = require("http");
-const fs = require("fs");
+const express = require("express");
+const app = express();
+
+app.use(express.static(__dirname));
 
 const chatroomsData = {
     "1" : {
@@ -11,7 +13,6 @@ const chatroomsData = {
             ["Tesla", "A few hundred thousand dollars.", "May 11", "3:21 pm"]
         ],
         "users":[
-            ["You(admin)", "owner"],
             ["J.P. Morgan", "admin"], 
             ["Thomas Edison", "manager"], 
             ["Guglielmo Marconi", "manager"]
@@ -44,31 +45,18 @@ const chatroomsData = {
     }
 }
 
-const lookup = require("mime-types").lookup;
-const server = http.createServer((req, res) => {
-    if (req.url === "/") {
-        req.url = "index.html";
-    } else if (req.url === "/chatroomsData"){
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify(chatroomsData));
-    }
+app.get('/', (req, res) => {
+  res.header("Content-Type",'text/html');
+  res.sendFile('index.html', { root: __dirname });
+  console.log(data);
+})
 
-    let file = __dirname +"/" + req.url;
+app.get('/chatroomsData', (req, res) => {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(chatroomsData));
+})
 
-    fs.readFile(file, function(err, content) {
-        if (err) {
-            res.writeHead(404);
-            res.end();
-        } else {
-            res.setHeader("X-Content-Type-Options", "nosniff");
-            let mime = lookup(req.url);
-            res.writeHead(200, { "Content-type": mime });
-            res.end(content);
-        }
-    });
-});
-
-server.listen(1234, "localhost", () => {
-    console.log("Listening on port 1234");
+app.listen(3000, function() {
+  console.log("Running on port 3000.");
 });
 

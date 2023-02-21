@@ -5,7 +5,6 @@ fetch('/chatroomsData')
     .then(response => response.json())
     .then(chatroomsData => {
         let n = 1
-        console.log(Object.keys(chatroomsData))
         for (room of Object.keys(chatroomsData)){
             let currRoom = chatroomsData[room]
             Chatrooms[currID + n] = new chatRoom(currRoom["name"], currRoom["description"], currID+n);
@@ -22,9 +21,8 @@ fetch('/chatroomsData')
 const addUser = document.querySelector("#add-user");
 addUser.addEventListener("click", function(e){
     e.preventDefault();
-    console.log("yeys");
     const selectedRoom = document.querySelector('.selected');
-    console.log(selectedRoom);
+    // console.log(selectedRoom);
     console.log(selectedRoom.id);
     Chatrooms[selectedRoom.id].addNewUser();
 })
@@ -82,7 +80,10 @@ createButton.addEventListener("click", function(e) {
             roomDescriptionInput.classList.remove('error');
         }, 300);
     } else{
-        eval ("var " + roomNameInput.value + " = new chatRoom(roomNameInput.value, roomDescriptionInput.value);")
+        var currID = 'room' + new Date().getTime().toString();
+        Chatrooms[currID] = new chatRoom(roomNameInput.value, roomDescriptionInput.value, currID);
+
+        // eval ("var " + Chatrooms[currID] + " = new chatRoom(roomNameInput.value, roomDescriptionInput.value, currID);")
     }
 })
 

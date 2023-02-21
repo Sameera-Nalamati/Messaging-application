@@ -12,7 +12,7 @@ class chatRoom{
         this.roomDescriptionInput = roomDescriptionInput;
 
         this.messages = [];
-        this.users = [];
+        this.users = [["You(admin)", "owner"]];
         this.id = currID;
 
         this.displayRoom();
