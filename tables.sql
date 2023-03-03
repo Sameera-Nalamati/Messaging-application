@@ -69,25 +69,3 @@ INSERT INTO message(message_text, sender_id, room_id) VALUES
 (":D", "tesla@gmail.com", 2),
 ("Wardenclyffe Workshop", "tesla@gmail.com", 3),
 ("What?", "JP@gmail.com", 3);
-
-
-SELECT room_id, room_name, room_description FROM room;
-
-SELECT message.room_id, message.message_text, message.sent_datetime, user.username 
-FROM message INNER JOIN user
-ON message.sender_id = user.email_id;
-
-
-SELECT 
-    message.room_id, 
-    message.message_text, 
-    DATE_FORMAT(message.sent_datetime, '%b %d') AS date, 
-    DATE_FORMAT(message.sent_datetime, '%h:%i %p') AS time, 
-    user.username  
-FROM message INNER JOIN user 
-ON message.sender_id = user.email_id;
-
-
-SELECT room_id, username, role 
-FROM participants INNER JOIN user
-ON participants.email_id = user.email_id;
