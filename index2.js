@@ -1,32 +1,31 @@
-import {chatRoom} from "./chatRoomsClass.js";
+// const socket = io();
 
 var Chatrooms = {};
-var currID = 'room' + new Date().getTime().toString();
 
-fetch('/chatroomsData')
+function fetchData(Chatrooms){
+    fetch('/chatroomsData')
     .then(response => response.json())
     .then(chatroomsData => {
-        let n = 1
         for (let room of Object.keys(chatroomsData)){
             let currRoom = chatroomsData[room]
-            Chatrooms[currID + n] = new chatRoom(currRoom["name"], currRoom["description"], currID+n);
-            Chatrooms[currID + n].messages.push(...currRoom["messages"]);
-            Chatrooms[currID + n].users.push(...currRoom["users"]);
-            n++;
+            Chatrooms[room] = new chatRoom(currRoom["name"], currRoom["description"], room);
+            Chatrooms[room].messages.push(...currRoom["messages"]);
+            Chatrooms[room].users.push(...currRoom["users"]);
         };
     })
     .catch(error => {
         console.error(error);
     });
+}
 
+fetchData(Chatrooms);
 
 //Add a new user
 const addUser = document.querySelector("#add-user");
 addUser.addEventListener("click", function(e){
     e.preventDefault();
+
     const selectedRoom = document.querySelector('.selected');
-    // console.log(selectedRoom);
-    console.log(selectedRoom.id);
     Chatrooms[selectedRoom.id].addNewUser();
 })
 
@@ -83,10 +82,11 @@ createButton.addEventListener("click", function(e) {
             roomDescriptionInput.classList.remove('error');
         }, 300);
     } else{
-        var currID = 'room' + new Date().getTime().toString();
+        // var currID = new Date().getTime().toString();
+        var currID = Chatrooms[Object.keys(Chatrooms)[Object.keys(Chatrooms).length - 1]].id + 1;
+        postInfo("/addRoom", [currID, roomNameInput.value, roomDescriptionInput.value]);
+        
         Chatrooms[currID] = new chatRoom(roomNameInput.value, roomDescriptionInput.value, currID);
-
-        // eval ("var " + Chatrooms[currID] + " = new chatRoom(roomNameInput.value, roomDescriptionInput.value, currID);")
     }
 })
 
