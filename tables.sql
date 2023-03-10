@@ -20,8 +20,8 @@ CREATE TABLE participants(
     role VARCHAR(25) NOT NULL CHECK(role IN ('owner', 'admin', 'manager')),
     joined_time TIMESTAMP DEFAULT NOW(),
     PRIMARY KEY(email_id, room_id),
-    FOREIGN KEY(email_id) REFERENCES user(email_id),
-    FOREIGN KEY(room_id) REFERENCES room(room_id)
+    FOREIGN KEY(email_id) REFERENCES user(email_id) ON DELETE CASCADE,
+    FOREIGN KEY(room_id) REFERENCES room(room_id) ON DELETE CASCADE
 );
 
 
@@ -31,8 +31,8 @@ CREATE TABLE message(
     sent_datetime TIMESTAMP NOT  NULL DEFAULT NOW(),
     sender_id VARCHAR(50) NOT NULL,
     room_id INT NOT NULL,
-    FOREIGN KEY(sender_id) REFERENCES user(email_id),
-    FOREIGN KEY(room_id) REFERENCES room(room_id)
+    FOREIGN KEY(sender_id) REFERENCES user(email_id) ON DELETE CASCADE,
+    FOREIGN KEY(room_id) REFERENCES room(room_id) ON DELETE CASCADE
 );
 
 
