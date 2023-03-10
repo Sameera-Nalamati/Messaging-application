@@ -47,15 +47,14 @@
         <img src="assets/chat-bubble.png" alt="chat" class="chat-icon">
 
         <div class="refresh-div">
-            <button class="refresh-button">
+            <button class="refresh-button" >
                 <img src="assets/refresh.png" alt="refresh" class="refresh-icon">
             </button>
-            
         </div>
 
         <textarea placeholder='Please select a chat room to message in'></textarea>
 
-        <button class="send-message">Send</button>
+        <button class="send-message" formaction="/add-user">Send</button>
 
         <button class="box-button">
             <img src="assets/box.png" alt="box" class="box">
@@ -81,8 +80,8 @@
     <div class="add-user-popup popup">
         <span class="add-user popup-heading">Add a new user</span>
 
-        <form>
-            <input type="text" placeholder="Email ID" id="new-username"><br><br>
+        <form action="/addUser" method="POST">
+            <input type="text" placeholder="Email ID" name="email" id="new-username"><br><br>
 
             <label for="roles">Choose a role:</label>
 
@@ -93,18 +92,15 @@
 
             <div class="buttons">
                 <button id="cancel-room">CANCEL</button>
-                <button id="add-user">ADD USER</button>
+                <button id="add-user" formaction="/addUser">ADD USER</button>
             </div>
         </form>
     </div>
-    <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
 
-    <!-- <script data-main="index2.js" src="require.js"></script> -->
-    <!-- <script src="server.js"></script> -->
-    <script type="module" src="chatRoomsClass.js"></script>
-    <script type="module" src="index2.js"></script>
-    <!-- <script src="chatRoomsClass.js"></script>
-    <script src="index2.js"></script> -->
+
+    <script src="chatRoomsClass.js"></script>
+    <script src="index2.js"></script>
+
     
 </body>
 </html>

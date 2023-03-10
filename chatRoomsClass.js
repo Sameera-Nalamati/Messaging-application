@@ -1,25 +1,42 @@
-// const mysql = require("mysql");
-// import * as mysql from "./node_modules/mysql/index.js";
-// const conn = mysql.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "root",
-//     database: "messaging_application"
-// });
+// async function postInfo(emailID, roomID, role){
+//     const res = await fetch("/addUser", 
+//     {
+//         method: 'POST',
+//         headers: {
+//             "Content-Type": "application/json"
+//         },
+//         body: JSON.stringify({
+//             emailID,
+//             roomID,
+//             role
+//         })
+//     })
 
-require(["mysql"],function(mysql){
-    const conn = mysql.createConnection({
-        host: "localhostc",
-        user: "root",
-        password: "root",
-        database: "messaging_application"
+//     const data = await res.json();
+//     return data;
+// }
+
+const userID = "tesla@gmail.com";
+
+async function postInfo(url, data){
+    const res = await fetch(url, 
+    {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            data
+        })
     })
-}); 
 
-// import {conn} from "./server.js";
-// console.log(conn);
+    const response = await res.json();
+    return response;
+}
 
-export class chatRoom{
+
+
+class chatRoom{
     constructor(roomNameInput, roomDescriptionInput, currID){
         // console.log(conn);
         const mask = document.querySelector(".page-mask");
@@ -36,6 +53,7 @@ export class chatRoom{
         this.messages = [];
         this.users = [["You(admin)", "owner"]];
         this.id = currID;
+
 
         this.displayRoom();
         this.roomDescriptionDiv.innerText = "";
@@ -57,7 +75,7 @@ export class chatRoom{
         chatTable.innerHTML = "";
 
         const messagePlaceholder = document.querySelector("textarea");
-        messagePlaceholder.placeholder = `Type your Message if "${this.roomNameInput}" room`;
+        messagePlaceholder.placeholder = `Type your Message in "${this.roomNameInput}" room`;
         
         this.showMessages();
 
@@ -109,7 +127,7 @@ export class chatRoom{
 
     //Delete a room
     deleteRoom(deleteButton){
-        const remove = deleteButton.parentNode;        
+        const remove = deleteButton.parentNode;   
         remove.remove();
 
         this.roomDescriptionDiv.innerText = "";
@@ -118,6 +136,9 @@ export class chatRoom{
 
         const messagePlaceholder = document.querySelector("textarea");
         messagePlaceholder.placeholder = "Please select a chat room to message in";
+
+        postInfo("/deleteRoom", [remove.id]);
+
 
         const userUL = document.querySelector(".user-list");
         userUL.innerHTML = "";
@@ -183,17 +204,15 @@ export class chatRoom{
             const selectedRoom = document.querySelector('.selected');
             console.log(this.messages);
             this.messages.push(["Tesla", messageText, date, currentTime]);
+
+            postInfo("/postMessage", [messageText, userID, selectedRoom.id]);
             
             this.createMessageRow(["Tesla", messageText, date, currentTime]);
         }
     }
 
-    createUserRow(username, role){
-        const mask = document.querySelector(".page-mask");
-        const addUserPopup = document.querySelector(".add-user-popup");
-        mask.style.display = "none";
-        addUserPopup.style.display = "none";
 
+    createUserRow(username, role){
         const userUL = document.querySelector(".user-list");
 
         const userLI = document.createElement("li");
@@ -202,6 +221,7 @@ export class chatRoom{
 
         userUL.appendChild(userLI);
     }
+
 
     showUsers(){
         let userList = this.users;
@@ -213,15 +233,42 @@ export class chatRoom{
 
     //Add a new user to the room
     addNewUser(){
-        // const selectedRoom = document.querySelector('.selected');
-
         const username = document.querySelector("#new-username").value;
         const role = document.querySelector("#roles").value;
+        const selectedRoom = document.querySelector('.selected');
+
+        const mask = document.querySelector(".page-mask");
+        const addUserPopup = document.querySelector(".add-user-popup");
+
 
         this.users.push([username, role]);
-        console.log( this.users);
+        console.log(this.users);
+        
+        let statusPromise = postInfo("/addUser", [username, selectedRoom.id, role])
+        .then((status) => {
+            return status;
+        });
 
-        this.createUserRow(username, role);
+        const status = async () => {
+            const a = await statusPromise;
+
+            if (a.status == "no user"){
+                mask.style.display = "none";
+                addUserPopup.style.display = "none";
+                alert("There is no user with this email ID");
+            } else if (a.status == "user already exists"){
+                mask.style.display = "none";
+                addUserPopup.style.display = "none";
+                alert("This user already exists in this room");
+            } else{
+                mask.style.display = "none";
+                addUserPopup.style.display = "none";
+                this.createUserRow(a.username, role);
+            }
+            // console.log(a.status);
+        };
+
+        status();
     }
 }
 
