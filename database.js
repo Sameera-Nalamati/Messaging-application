@@ -1,4 +1,3 @@
-// import mysql from "mysql";
 const mysql = require("mysql");
 
 
