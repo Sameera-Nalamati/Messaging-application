@@ -1,3 +1,4 @@
+// import mysql from "mysql";
 const mysql = require("mysql");
 
 
@@ -87,9 +88,10 @@ async function sequentialQueries () {
     } catch(error){
         console.log(error)
     }
+
+    return chatroomsData;
 }
 
-sequentialQueries();
+// sequentialQueries();
 
-module.exports.chatroomsData = chatroomsData
-
+module.exports.chatroomsData = sequentialQueries;

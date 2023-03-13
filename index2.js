@@ -1,11 +1,13 @@
-// const socket = io();
-
 var Chatrooms = {};
 
 function fetchData(Chatrooms){
+    const roomListUl = document.querySelector("ul.room-list")
+    roomListUl.innerHTML = "";
+
     fetch('/chatroomsData')
     .then(response => response.json())
     .then(chatroomsData => {
+        Chatrooms = {};
         for (let room of Object.keys(chatroomsData)){
             let currRoom = chatroomsData[room]
             Chatrooms[room] = new chatRoom(currRoom["name"], currRoom["description"], room);
@@ -19,6 +21,12 @@ function fetchData(Chatrooms){
 }
 
 fetchData(Chatrooms);
+
+setInterval(() => {
+    fetchData(Chatrooms);
+    console.log(Chatrooms);
+}, 60000); 
+
 
 //Add a new user
 const addUser = document.querySelector("#add-user");
@@ -62,6 +70,7 @@ cancelRoomButtom.addEventListener("click", function(e){
 })
 
 
+
 //Create a new room
 const createButton = document.querySelector("#create-room");
 createButton.addEventListener("click", function(e) {
@@ -82,11 +91,15 @@ createButton.addEventListener("click", function(e) {
             roomDescriptionInput.classList.remove('error');
         }, 300);
     } else{
-        // var currID = new Date().getTime().toString();
-        var currID = Chatrooms[Object.keys(Chatrooms)[Object.keys(Chatrooms).length - 1]].id + 1;
+        var currID = new Date().getTime().toString();
+        // console.log(Chatrooms[Object.keys(Chatrooms)[Object.keys(Chatrooms).length - 1]]);
+        // var currID = parseInt(Chatrooms[Object.keys(Chatrooms)[Object.keys(Chatrooms).length - 1]].id) + 1;
+        console.log(currID);
         postInfo("/addRoom", [currID, roomNameInput.value, roomDescriptionInput.value]);
+        postInfo("/addUser", [userID, currID, "owner"]);
         
         Chatrooms[currID] = new chatRoom(roomNameInput.value, roomDescriptionInput.value, currID);
+        
     }
 })
 

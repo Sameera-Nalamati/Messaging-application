@@ -1,21 +1,3 @@
-// async function postInfo(emailID, roomID, role){
-//     const res = await fetch("/addUser", 
-//     {
-//         method: 'POST',
-//         headers: {
-//             "Content-Type": "application/json"
-//         },
-//         body: JSON.stringify({
-//             emailID,
-//             roomID,
-//             role
-//         })
-//     })
-
-//     const data = await res.json();
-//     return data;
-// }
-
 const userID = "tesla@gmail.com";
 
 async function postInfo(url, data){
@@ -56,7 +38,6 @@ class chatRoom{
 
 
         this.displayRoom();
-        this.roomDescriptionDiv.innerText = "";
     }
 
     //Select a room
@@ -138,7 +119,6 @@ class chatRoom{
         messagePlaceholder.placeholder = "Please select a chat room to message in";
 
         postInfo("/deleteRoom", [remove.id]);
-
 
         const userUL = document.querySelector(".user-list");
         userUL.innerHTML = "";
@@ -250,13 +230,13 @@ class chatRoom{
         });
 
         const status = async () => {
-            const a = await statusPromise;
+            const currStatus = await statusPromise;
 
-            if (a.status == "no user"){
+            if (currStatus.status == "no user"){
                 mask.style.display = "none";
                 addUserPopup.style.display = "none";
                 alert("There is no user with this email ID");
-            } else if (a.status == "user already exists"){
+            } else if (currStatus.status == "user already exists"){
                 mask.style.display = "none";
                 addUserPopup.style.display = "none";
                 alert("This user already exists in this room");
@@ -265,9 +245,7 @@ class chatRoom{
                 addUserPopup.style.display = "none";
                 this.createUserRow(a.username, role);
             }
-            // console.log(a.status);
         };
-
         status();
     }
 }

@@ -25,16 +25,19 @@ app.get('/', (req, res) => {
 })
 
 app.get('/chatroomsData', (req, res) => {
-    var chatroomsData = database.chatroomsData;
+    database.chatroomsData()
+    .then((chatroomsData) => {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify(chatroomsData));
+    });
 
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(chatroomsData));
+    // console.log(chatroomsData);
+
+    // res.writeHead(200, { 'Content-Type': 'application/json' });
+    // res.end(JSON.stringify(chatroomsData));
 })
 
 app.post('/addUser', (req, res) => {
-    // const data = req.body;
-    // console.log(data);
-
     const [emailID, roomID, role] = req.body.data;
 
     let query = `SELECT email_id, username FROM user WHERE email_id = "${emailID}";`;
@@ -88,6 +91,8 @@ app.post('/deleteRoom', (req, res) => {
     conn.query(query, function(err, results){
         console.log(err, results);
     })
+
+    // fetch('/chatroomsData');
 })
 
 

@@ -7,7 +7,7 @@ CREATE TABLE user(
 
 
 CREATE TABLE room(
-    room_id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    room_id BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     room_name VARCHAR(50) NOT NULL,
     room_description VARCHAR(50) NOT NULL,
     created_time TIMESTAMP DEFAULT NOW()
@@ -16,7 +16,7 @@ CREATE TABLE room(
 
 CREATE TABLE participants(
     email_id VARCHAR(50) NOT NULL,
-    room_id INT NOT NULL,
+    room_id BIGINT NOT NULL,
     role VARCHAR(25) NOT NULL CHECK(role IN ('owner', 'admin', 'manager')),
     joined_time TIMESTAMP DEFAULT NOW(),
     PRIMARY KEY(email_id, room_id),
@@ -30,7 +30,7 @@ CREATE TABLE message(
     message_text VARCHAR(255) NOT NULL,
     sent_datetime TIMESTAMP NOT  NULL DEFAULT NOW(),
     sender_id VARCHAR(50) NOT NULL,
-    room_id INT NOT NULL,
+    room_id BIGINT NOT NULL,
     FOREIGN KEY(sender_id) REFERENCES user(email_id) ON DELETE CASCADE,
     FOREIGN KEY(room_id) REFERENCES room(room_id) ON DELETE CASCADE
 );
@@ -45,8 +45,8 @@ INSERT INTO user(email_id, username, password) VALUES
 
 INSERT INTO room(room_name, room_description) VALUES
 ("Tesla Tower", "Electricity for all"),
-("Wardenclyffe Workshop", "Electicity for some people."),
-("AC > DC", "Electicity for no one.");
+("Wardenclyffe Workshop", "Electricity for some people."),
+("AC > DC", "Electricity for no one.");
 
 INSERT INTO participants(email_id, room_id, role) VALUES
 ("tesla@gmail.com", 1, "owner"),
@@ -69,3 +69,25 @@ INSERT INTO message(message_text, sender_id, room_id) VALUES
 (":D", "tesla@gmail.com", 2),
 ("Wardenclyffe Workshop", "tesla@gmail.com", 3),
 ("What?", "JP@gmail.com", 3);
+
+
+SELECT room_id, room_name, room_description FROM room;
+
+SELECT message.room_id, message.message_text, message.sent_datetime, user.username 
+FROM message INNER JOIN user
+ON message.sender_id = user.email_id;
+
+
+SELECT 
+    message.room_id, 
+    message.message_text, 
+    DATE_FORMAT(message.sent_datetime, '%b %d') AS date, 
+    DATE_FORMAT(message.sent_datetime, '%h:%i %p') AS time, 
+    user.username  
+FROM message INNER JOIN user 
+ON message.sender_id = user.email_id;
+
+
+SELECT room_id, username, role 
+FROM participants INNER JOIN user
+ON participants.email_id = user.email_id;
