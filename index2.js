@@ -1,31 +1,47 @@
-var Chatrooms = {};
+let Chatrooms = {};
 
-function fetchData(Chatrooms){
+
+function fetchData(){
     const roomListUl = document.querySelector("ul.room-list")
     roomListUl.innerHTML = "";
 
-    fetch('/chatroomsData')
-    .then(response => response.json())
-    .then(chatroomsData => {
-        Chatrooms = {};
-        for (let room of Object.keys(chatroomsData)){
-            let currRoom = chatroomsData[room]
-            Chatrooms[room] = new chatRoom(currRoom["name"], currRoom["description"], room);
-            Chatrooms[room].messages.push(...currRoom["messages"]);
-            Chatrooms[room].users.push(...currRoom["users"]);
-        };
+    return new Promise((resolve, reject) => {
+        fetch('/chatroomsData')
+        .then(response => response.json())
+        .then(chatroomsData => {
+            Chatrooms = {};
+            for (let room of Object.keys(chatroomsData)){
+                let currRoom = chatroomsData[room]
+                Chatrooms[room] = new chatRoom(currRoom["name"], currRoom["description"], room);
+            };
+
+            return resolve(Chatrooms);
+        })
+        .catch(error => {
+            return reject(error);
+        });
     })
-    .catch(error => {
-        console.error(error);
-    });
 }
 
-fetchData(Chatrooms);
+fetchData();
 
-setInterval(() => {
-    fetchData(Chatrooms);
-    console.log(Chatrooms);
-}, 60000); 
+
+// setInterval(() => {
+//     let selectedRoom = document.querySelector('.selected'); 
+
+//     fetchData(Chatrooms)
+//     .then(() => {
+//         if (selectedRoom){
+//             console.log(selectedRoom);
+//             Chatrooms[selectedRoom.id].selectRoom(selectedRoom.firstChild);
+//             console.log(Chatrooms[selectedRoom.id]);
+//         }
+//     })
+    
+//     console.log(Chatrooms);
+// }, 60000)
+
+
 
 
 //Add a new user
@@ -34,6 +50,8 @@ addUser.addEventListener("click", function(e){
     e.preventDefault();
 
     const selectedRoom = document.querySelector('.selected');
+    console.log(Chatrooms);
+    console.log(selectedRoom.id);
     Chatrooms[selectedRoom.id].addNewUser();
 })
 
@@ -92,9 +110,6 @@ createButton.addEventListener("click", function(e) {
         }, 300);
     } else{
         var currID = new Date().getTime().toString();
-        // console.log(Chatrooms[Object.keys(Chatrooms)[Object.keys(Chatrooms).length - 1]]);
-        // var currID = parseInt(Chatrooms[Object.keys(Chatrooms)[Object.keys(Chatrooms).length - 1]].id) + 1;
-        console.log(currID);
         postInfo("/addRoom", [currID, roomNameInput.value, roomDescriptionInput.value]);
         postInfo("/addUser", [userID, currID, "owner"]);
         

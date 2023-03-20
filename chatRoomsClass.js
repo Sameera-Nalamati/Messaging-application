@@ -18,15 +18,14 @@ async function postInfo(url, data){
 
 
 
-class chatRoom{
+class chatRoom{ 
     constructor(roomNameInput, roomDescriptionInput, currID){
-        // console.log(conn);
         const mask = document.querySelector(".page-mask");
         const newRoomPopup = document.querySelector(".new-room-popup");
 
         //Remove mask
-        mask.style.display = "none";
-        newRoomPopup.style.display = "none";
+        // mask.style.display = "none";
+        // newRoomPopup.style.display = "none";
 
         //Initialising the variable
         this.roomNameInput = roomNameInput;
@@ -40,15 +39,29 @@ class chatRoom{
         this.displayRoom();
     }
 
+
     //Select a room
     selectRoom(roomDiv){
+        console.log("selecting room");
         const roomLI = roomDiv.parentNode;
         const selectedRoom = document.querySelector('.selected');
+        if (selectedRoom == roomLI){
+            return;
+        }
+
         if(selectedRoom){
             selectedRoom.classList.remove("selected");
         }
 
         roomLI.classList.add("selected");
+        postInfo("/getData", [roomLI.id])
+        .then((chatroomsData) => {
+            this.messages = chatroomsData.messages;
+            this.users = [["You(admin)", "owner"], ...chatroomsData.users];
+
+            this.showMessages();
+            this.showUsers();
+        });
 
         this.roomDescriptionDiv.innerText = this.roomDescriptionInput;
 
@@ -58,14 +71,12 @@ class chatRoom{
         const messagePlaceholder = document.querySelector("textarea");
         messagePlaceholder.placeholder = `Type your Message in "${this.roomNameInput}" room`;
         
-        this.showMessages();
-
+        
         const userUL = document.querySelector(".user-list");
         userUL.innerHTML = "";
 
         const addUser = document.querySelector(".add-user-button");
         addUser.style.display = "initial";
-        this.showUsers();
     }
 
 
@@ -243,7 +254,7 @@ class chatRoom{
             } else{
                 mask.style.display = "none";
                 addUserPopup.style.display = "none";
-                this.createUserRow(a.username, role);
+                this.createUserRow(currStatus.username, role);
             }
         };
         status();

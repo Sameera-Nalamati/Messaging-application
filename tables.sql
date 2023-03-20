@@ -91,3 +91,53 @@ ON message.sender_id = user.email_id;
 SELECT room_id, username, role 
 FROM participants INNER JOIN user
 ON participants.email_id = user.email_id;
+
+
+SELECT 
+    message.room_id, 
+    message.message_text, 
+    DATE_FORMAT(message.sent_datetime, '%b %d') AS date, 
+    DATE_FORMAT(message.sent_datetime, '%h:%i %p') AS time, 
+    user.username 
+FROM message INNER JOIN user 
+    ON message.sender_id = user.email_id 
+WHERE message.room_id = 1 
+ORDER BY sent_datetime ;
+
+
+SELECT room_id, username, role  
+FROM participants INNER JOIN user 
+    ON participants.email_id = user.email_id 
+WHERE role != 'owner' AND participants.room_id = 1 
+ORDER BY role DESC ;
+
+
+--TRIAL
+SELECT 
+    message.room_id, 
+    message.message_text, 
+    DATE_FORMAT(message.sent_datetime, '%b %d') AS date, 
+    DATE_FORMAT(message.sent_datetime, '%h:%i %p') AS time, 
+    user.username,
+    participants.role
+FROM message 
+INNER JOIN user 
+    ON message.sender_id = user.email_id 
+INNER JOIN participants 
+    ON participants.email_id = user.email_id 
+WHERE message.room_id = 1 
+ORDER BY sent_datetime;
+
+
+SELECT 
+    message.room_id, 
+    message.message_text, 
+    DATE_FORMAT(message.sent_datetime, '%b %d') AS date, 
+    DATE_FORMAT(message.sent_datetime, '%h:%i %p') AS time, 
+    participants.email_id,
+    participants.role
+FROM message 
+INNER JOIN participants 
+    ON participants.room_id = message.room_id 
+WHERE message.room_id = 1 
+ORDER BY sent_datetime;
