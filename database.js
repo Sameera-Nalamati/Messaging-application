@@ -29,7 +29,6 @@ roomPromise = () => {
                 }
             }
             console.log("Running roomPromise");
-            // console.log(chatroomsData);
 
             return resolve(chatroomsData);
         });

@@ -26,22 +26,29 @@ function fetchData(){
 fetchData();
 
 
-// setInterval(() => {
-//     let selectedRoom = document.querySelector('.selected'); 
+setInterval(() => {
+    let selectedRoom = document.querySelector('.selected'); 
 
-//     fetchData(Chatrooms)
-//     .then(() => {
-//         if (selectedRoom){
-//             console.log(selectedRoom);
-//             Chatrooms[selectedRoom.id].selectRoom(selectedRoom.firstChild);
-//             console.log(Chatrooms[selectedRoom.id]);
-//         }
-//     })
+    fetchData(Chatrooms)
+    .then(() => {
+        if (selectedRoom){
+            console.log(selectedRoom);
+            Chatrooms[selectedRoom.id].selectRoom(selectedRoom.firstChild);
+            console.log(Chatrooms[selectedRoom.id]);
+        }
+    })
     
-//     console.log(Chatrooms);
-// }, 60000)
+    console.log(Chatrooms);
+}, 60000)
 
 
+function showError(input){
+    input.classList.add("error");
+
+    setTimeout(function() {
+        input.classList.remove('error');
+    }, 300);
+}
 
 //Add a new user
 const addUser = document.querySelector("#add-user");
@@ -97,23 +104,18 @@ createButton.addEventListener("click", function(e) {
     var roomDescriptionInput = document.querySelector("#new-room-description");
 
     if (roomNameInput.value == ""){
-        roomNameInput.classList.add("error");
-        setTimeout(function() {
-            roomNameInput.classList.remove('error');
-        }, 300);
+        showError(roomNameInput);
+
         
     }if (roomDescriptionInput.value == ""){
-        roomDescriptionInput.classList.add("error");
-        setTimeout(function() {
-            roomDescriptionInput.classList.remove('error');
-        }, 300);
+        showError(roomDescriptionInput);
+
     } else{
         var currID = new Date().getTime().toString();
         postInfo("/addRoom", [currID, roomNameInput.value, roomDescriptionInput.value]);
         postInfo("/addUser", [userID, currID, "owner"]);
         
         Chatrooms[currID] = new chatRoom(roomNameInput.value, roomDescriptionInput.value, currID);
-        
     }
 })
 
@@ -187,21 +189,31 @@ login_button.addEventListener('click', function(e){
     let email = login_email.value;
     let password = login_password.value;
 
-    postInfo("/userLogin", [email, password])
-    .then((response) => {
-        console.log(response);
-        if (response.status == "no user"){
-            alert("There is no user with this email ID");
-        } else if (response.status == "valid user"){
-            login_popup.style.display = "none";
-            mask.style.display = "none";
-            fetchData();
-        } else if (response.status == "invalid user"){
-            alert("Wrong password");
-        } else {
-            alert("Error!");
-        }
-    })
+    if (email == ""){
+        showError(login_email);
+
+    } else if (password == ""){
+        showError(login_password);
+
+    } else {    
+        postInfo("/userLogin", [email, password])
+        .then((response) => {
+            console.log(response);
+            if (response.status == "no user"){
+                showError(login_email);
+                // alert("There is no user with this email ID");
+            } else if (response.status == "valid user"){
+                login_popup.style.display = "none";
+                mask.style.display = "none";
+                fetchData();
+            } else if (response.status == "invalid user"){
+                showError(login_password);
+
+            } else {
+                alert("Error!");
+            }
+        })
+    }
 })
 
 
@@ -212,15 +224,26 @@ register_button.addEventListener('click', function(e){
     let username = register_username.value;
     let password = register_password.value;
 
-    postInfo("/userRegister", [email, username, password])
-    .then((response) => {
-        console.log(response);
-        if (response.status == "user already exists"){
-            alert("There is already a user with this email ID");
-        } else if (response.status == "user added"){
-            window.location.reload();
-        } else {
-            alert("Error!");
-        }
-    })
+    if (email == ""){
+        showError(register_email);
+
+    } else if (username == ""){
+        showError(register_username);
+
+    } else if (password == ""){
+        showError(register_password);
+
+    } else {    
+        postInfo("/userRegister", [email, username, password])
+        .then((response) => {
+            console.log(response);
+            if (response.status == "user already exists"){
+                alert("There is already a user with this email ID");
+            } else if (response.status == "user added"){
+                window.location.reload();
+            } else {
+                alert("Error!");
+            }
+        })
+    }
 })
