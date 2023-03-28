@@ -338,7 +338,22 @@ textarea{
     top: 0;
     background-color: rgba(0,0,0,0.6);
     z-index: 90;
-    display: none;
+    /* display: none; */
+}
+
+
+.login-popup{
+    background-color: #eeeeee;
+    position: fixed;
+    width: 350px;
+    left: 40%;
+    right: 40%;
+    bottom: 30%;
+    top: 20%;
+    border: solid 1px gray;
+    z-index: 100;
+    text-align: center;
+    font-family: 'Maven Pro', sans-serif;
 }
 
 .popup{
@@ -348,7 +363,7 @@ textarea{
     left: 40%;
     right: 40%;
     bottom: 40%;
-    top: 15%;
+    top: 20%;
     border: solid 1px gray;
     z-index: 100;
     text-align: center;
@@ -367,32 +382,50 @@ textarea{
     font-weight: 500;
 }
 
-form{
+form.new{
     margin-top: 40px;
 }
 
-form > input{
+form > input, form > * > input{
     margin: 5px;
     padding: 10px;
     width: 250px;
     border: 1px solid gray;
 }
 
-form > input::placeholder{
+form > input::placeholder, form > * > input::placeholder{
     font-family: 'Maven Pro', sans-serif;
     color: rgb(191, 191, 191);
     font-size: 15px;
 }
 
 div.buttons{
-    /* position: absolute; */
     background-color: #f8f8f8;
     padding: 15px;
     height: 40px;
-    margin-top: 40px;
-    border-top: 1px solid lightgrey;
+    margin-top: 25px;
+    border-top: 1px solid gray;
     bottom: 40%;
-    /* border-bottom: 1px solid gray; */
+}
+
+form.login-form > input[type=button]{
+    background-color: #f8f8f8;
+    border-left: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 22px;
+    font-weight: bold;
+    color: rgb(79, 79, 79);
+    width: 51%;
+    padding: 20px;
+    margin-right: -5px;
+    margin-left: -5px;
+    margin-top: -40px;
+    margin-bottom: 60px;
+}
+
+.signup{
+    margin-top: -80px;
 }
 
 div.buttons > button{
@@ -402,7 +435,6 @@ div.buttons > button{
     margin-top: 2.5px;
     border: none;
     color: white;
-    /* margin-top: 75px; */
 }
 
 .error {

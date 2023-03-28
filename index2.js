@@ -43,7 +43,6 @@ fetchData();
 
 
 
-
 //Add a new user
 const addUser = document.querySelector("#add-user");
 addUser.addEventListener("click", function(e){
@@ -141,3 +140,87 @@ sendMessageButton.addEventListener('click', function(){
     }
 })
 
+
+const login_email = document.querySelector('input[type=text]#login_email');
+const login_password = document.querySelector('input[type=password]#login_password');
+const login_button = document.querySelector('button#login-user');
+
+const register_email = document.querySelector('input[type=email]#register_email');
+const register_username = document.querySelector('input[type=text]#register_username');
+const register_password = document.querySelector('input[type=password]#register_password');
+const register_button = document.querySelector('button#signup-user');
+
+const login_popup = document.querySelector('.login-popup');
+// console.log(login_popup);
+
+//Login button click
+const login = document.querySelector('input[type=button]#login');
+login.addEventListener('click', function(){
+    login_email.style.display = "inline";
+    login_password.style.display = "inline";
+    login_button.style.display = "inline";
+
+    register_email.style.display = "none";
+    register_username.style.display = "none";
+    register_password.style.display = "none";
+    register_button.style.display = "none";
+})
+
+
+//Signup button click
+const signup = document.querySelector('input[type=button]#signup');
+signup.addEventListener('click', function(){
+    login_email.style.display = "none";
+    login_password.style.display = "none";
+    login_button.style.display = "none";
+
+    register_email.style.display = "inline";
+    register_username.style.display = "inline";
+    register_password.style.display = "inline";    
+    register_button.style.display = "inline";
+})
+
+
+login_button.addEventListener('click', function(e){
+    e.preventDefault();
+
+    let email = login_email.value;
+    let password = login_password.value;
+
+    postInfo("/userLogin", [email, password])
+    .then((response) => {
+        console.log(response);
+        if (response.status == "no user"){
+            alert("There is no user with this email ID");
+        } else if (response.status == "valid user"){
+            login_popup.style.display = "none";
+            mask.style.display = "none";
+            fetchData();
+        } else if (response.status == "invalid user"){
+            alert("Wrong password");
+        } else {
+            alert("Error!");
+        }
+    })
+})
+
+
+register_button.addEventListener('click', function(e){
+    e.preventDefault();
+
+    let email = register_email.value;
+    let username = register_username.value;
+    let password = register_password.value;
+
+    postInfo("/userRegister", [email, username, password])
+    .then((response) => {
+        console.log(response);
+        if (response.status == "user already exists"){
+            alert("There is already a user with this email ID");
+        } else if (response.status == "user added"){
+            window.location.reload();
+        } else {
+            alert("Error!");
+        }
+    })
+})

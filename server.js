@@ -1,5 +1,4 @@
 const express = require("express");
-const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const database = require('./database.js');
 
@@ -9,10 +8,12 @@ app.use(express.static(__dirname));
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+
 app.get('/', (req, res) => {
     res.header("Content-Type",'text/html');
     res.sendFile('index.html', { root: __dirname });
 })
+
 
 app.get('/chatroomsData', (req, res) => {
     database.roomPromise()
@@ -24,6 +25,7 @@ app.get('/chatroomsData', (req, res) => {
         return res.status(400).send({status: 'database connection error'});
     })
 })
+
 
 app.post('/getData', (req, res) => {
     const [roomID] = req.body.data;
@@ -37,20 +39,33 @@ app.post('/getData', (req, res) => {
     })
 })
 
+
 app.post('/addUser', (req, res) => {
     database.addUser(req.body.data, res);
 })
+
 
 app.post('/postMessage', (req, res) => {
     database.postMessage(req.body.data, res);
 })
 
+
 app.post('/addRoom', (req, res) => {
     database.addRoom(req.body.data, res)
 })
 
+
 app.post('/deleteRoom', (req, res) => {
     database.deleteRoom(req.body.data, res);
+})
+
+
+app.post('/userLogin', (req, res) => {
+    database.loginCheck(req.body.data, res)
+})
+
+app.post('/userRegister', (req, res) => {
+    database.registerUser(req.body.data, res);
 })
 
 

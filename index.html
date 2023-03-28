@@ -38,9 +38,8 @@
     <div class="top-right">
         <img src="assets/plus-symbol-button.png" alt="add user" class="add-user-button">
         <ul class="user-list">
-            
+        
         </ul>
-
     </div>
 
     <div class="message">
@@ -63,10 +62,34 @@
 
     <div class="page-mask"></div>
 
+    <div class="login-popup">
+        <form method="POST" class="login-form">
+            <input type="button" value="Login" name="login" id="login"/>
+            <input type="button" value="Signup" name="signup" id="signup"/>
+
+            <div class="login">
+                <input type="text" placeholder="Email ID" name="login_email" id="login_email"><br><br>
+                <input type="password" placeholder="Password" name="password" id="login_password"><br><br>    
+            </div>
+
+            <div class="signup">
+                <input type="email" placeholder="Email ID" name="register_email" id="register_email" style="display: none;" class="signup"><br><br>
+                <input type="text" placeholder="Username" name="register_username" id="register_username" style="display: none;" class="signup"><br><br>
+                <input type="password" placeholder="Password" name="register_password" id="register_password" style="display: none;" class="signup"><br><br>
+            </div>
+
+            <div class="buttons login-buttons">
+                <button id="cancel-login">CLOSE</button>
+                <button id="login-user">SUBMIT</button>
+                <button id="signup-user" style="display: none;">SUBMIT</button>
+            </div>
+        </form>
+    </div>
+
     <div class="new-room-popup popup">
         <span class="new-room popup-heading">New chat room</span>
 
-        <form>
+        <form class="new">
             <input type="text" placeholder="Room name" id="new-room-name">
             <input type="text" placeholder="Room description" id="new-room-description">
             <div class="buttons">
@@ -80,7 +103,7 @@
     <div class="add-user-popup popup">
         <span class="add-user popup-heading">Add a new user</span>
 
-        <form action="/addUser" method="POST">
+        <form action="/addUser" method="POST" class="new">
             <input type="text" placeholder="Email ID" name="email" id="new-username"><br><br>
 
             <label for="roles">Choose a role:</label>
@@ -91,7 +114,7 @@
             </select>
 
             <div class="buttons">
-                <button id="cancel-room">CANCEL</button>
+                <button id="cancel-user">CANCEL</button>
                 <button id="add-user" formaction="/addUser">ADD USER</button>
             </div>
         </form>
@@ -99,8 +122,6 @@
 
 
     <script src="chatRoomsClass.js"></script>
-    <script src="index2.js"></script>
-
-    
+    <script src="index2.js"></script>    
 </body>
 </html>

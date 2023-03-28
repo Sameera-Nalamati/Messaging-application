@@ -35,7 +35,6 @@ class chatRoom{
         this.users = [["You(admin)", "owner"]];
         this.id = currID;
 
-
         this.displayRoom();
     }
 
