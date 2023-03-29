@@ -1,5 +1,6 @@
 let Chatrooms = {};
 
+let currUser;
 
 function fetchData(){
     const roomListUl = document.querySelector("ul.room-list")
@@ -26,20 +27,20 @@ function fetchData(){
 fetchData();
 
 
-setInterval(() => {
-    let selectedRoom = document.querySelector('.selected'); 
+// setInterval(() => {
+//     let selectedRoom = document.querySelector('.selected'); 
 
-    fetchData(Chatrooms)
-    .then(() => {
-        if (selectedRoom){
-            console.log(selectedRoom);
-            Chatrooms[selectedRoom.id].selectRoom(selectedRoom.firstChild);
-            console.log(Chatrooms[selectedRoom.id]);
-        }
-    })
+//     fetchData(Chatrooms)
+//     .then(() => {
+//         if (selectedRoom){
+//             console.log(selectedRoom);
+//             Chatrooms[selectedRoom.id].selectRoom(selectedRoom.firstChild);
+//             console.log(Chatrooms[selectedRoom.id]);
+//         }
+//     })
     
-    console.log(Chatrooms);
-}, 60000)
+//     console.log(Chatrooms);
+// }, 60000)
 
 
 function showError(input){
@@ -203,6 +204,7 @@ login_button.addEventListener('click', function(e){
                 showError(login_email);
                 // alert("There is no user with this email ID");
             } else if (response.status == "valid user"){
+                currUser = {"username": response.username, "email": email};
                 login_popup.style.display = "none";
                 mask.style.display = "none";
                 fetchData();

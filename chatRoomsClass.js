@@ -193,11 +193,11 @@ class chatRoom{
 
             const selectedRoom = document.querySelector('.selected');
             console.log(this.messages);
-            this.messages.push(["Tesla", messageText, date, currentTime]);
+            this.messages.push([currUser.username, messageText, date, currentTime]);
 
-            postInfo("/postMessage", [messageText, userID, selectedRoom.id]);
+            postInfo("/postMessage", [messageText, currUser.email, selectedRoom.id]);
             
-            this.createMessageRow(["Tesla", messageText, date, currentTime]);
+            this.createMessageRow([currUser.username, messageText, date, currentTime]);
         }
     }
 

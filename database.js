@@ -148,12 +148,12 @@ function loginCheck(data, res){
         if (results.length == 0){
             return res.status(200).send({status: 'no user'});   
         } else {
-            query = `SELECT password FROM user WHERE email_id = "${email}"`;
+            query = `SELECT password, username FROM user WHERE email_id = "${email}"`;
             conn.query(query, function(err, results){
                 bcrypt.compare(password, results[0].password, function(err, result) {
                     if (result) {
                         roomPromise();
-                        return res.status(200).send({status: 'valid user'});   
+                        return res.status(200).send({status: 'valid user', username: results[0].username});   
                     } else {
                         return res.status(200).send({status: 'invalid user'})
                     }
