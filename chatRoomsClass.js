@@ -24,8 +24,8 @@ class chatRoom{
         const newRoomPopup = document.querySelector(".new-room-popup");
 
         //Remove mask
-        // mask.style.display = "none";
-        // newRoomPopup.style.display = "none";
+        mask.style.display = "none";
+        newRoomPopup.style.display = "none";
 
         //Initialising the variable
         this.roomNameInput = roomNameInput;
