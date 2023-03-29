@@ -1,5 +1,5 @@
-const e = require("express");
 const mysql = require("mysql");
+const bcrypt = require("bcrypt")
 
 const conn = mysql.createConnection({
     host: "localhost",
@@ -150,12 +150,14 @@ function loginCheck(data, res){
         } else {
             query = `SELECT password FROM user WHERE email_id = "${email}"`;
             conn.query(query, function(err, results){
-                if (results[0].password == password){
-                    roomPromise();
-                    return res.status(200).send({status: 'valid user'});   
-                } else {
-                    return res.status(200).send({status: 'invalid user'})
-                }
+                bcrypt.compare(password, results[0].password, function(err, result) {
+                    if (result) {
+                        roomPromise();
+                        return res.status(200).send({status: 'valid user'});   
+                    } else {
+                        return res.status(200).send({status: 'invalid user'})
+                    }
+                });
             })
         }
         if (err) return res.status(400).send({status: 'error'});
@@ -173,13 +175,19 @@ function registerUser(data, res){
         if (results.length != 0){
             return res.status(200).send({status: 'user already exists'});
         } else{
-            query = `INSERT INTO user(email_id, username, password) VALUES ("${email}", "${username}", "${password}");`;
-            console.log(query);
-            conn.query(query, function(err, results){
-                console.log(results);
-                if (err) return res.status(200).send({status: 'error'});   
-                return res.status(200).send({status: 'user added'});   
+            bcrypt.genSalt(10, (err, salt) => {
+                bcrypt.hash(password, salt, function(err, hash) {
+                    query = `INSERT INTO user(email_id, username, password) VALUES ("${email}", "${username}", "${hash}");`;
+                    console.log(query);
+
+                    conn.query(query, function(err, results){
+                        console.log(results);
+                        if (err) return res.status(200).send({status: 'error'});   
+                        return res.status(200).send({status: 'user added'});   
+                    });
+                });
             })
+            
         }
     })
 }
